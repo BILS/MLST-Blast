@@ -3,7 +3,8 @@ MLST-Blast
 
 DESCRIPTION
 
-    Scripts for conducting multi-locus sequencing typing against the pubmlst.org database using blast.
+    Scripts for conducting multi-locus sequencing typing
+    against the pubmlst.org database using blast.
 
 
 SYNOPSIS
