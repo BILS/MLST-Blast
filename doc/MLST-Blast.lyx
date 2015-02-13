@@ -1,0 +1,2582 @@
+#LyX 2.0 created this file. For more info see http://www.lyx.org/
+\lyxformat 413
+\begin_document
+\begin_header
+\textclass article
+\use_default_options true
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman default
+\font_sans default
+\font_typewriter default
+\font_default_family sfdefault
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry true
+\use_amsmath 1
+\use_esint 1
+\use_mhchem 1
+\use_mathdots 1
+\cite_engine basic
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\use_refstyle 1
+\boxbgcolor #000000
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\leftmargin 2.5cm
+\topmargin 2cm
+\rightmargin 2.5cm
+\bottommargin 3cm
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+
+\family sans
+Instructions for Doing Multi-Locus Sequencing Typing Using MLST-Blast
+\end_layout
+
+\begin_layout Author
+
+\family sans
+Johan Nylander
+\end_layout
+
+\begin_layout Standard
+
+\family sans
+These are brief instructions for using the scripts download-mlst-data.pl
+ and mlst-blast.pl for assigning strains to ST-types given fasta-formatted
+ input data.
+\end_layout
+
+\begin_layout Section*
+
+\family sans
+For the impatient
+\end_layout
+
+\begin_layout Enumerate
+
+\family sans
+Get scripts download-mlst-data.pl and mlst-blast.pl from 
+\begin_inset CommandInset href
+LatexCommand href
+name "https://github.com/nylander/MLST-Blast"
+target "https://github.com/nylander/MLST-Blast"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+
+\family sans
+Prepare a special fasta-formatted input file (e.g., query.fas) with DNA data
+ from one or several strains
+\end_layout
+
+\begin_layout Enumerate
+
+\family typewriter
+\begin_inset Box Doublebox
+position "c"
+hor_pos "c"
+has_inner_box 1
+inner_pos "c"
+use_parbox 0
+use_makebox 0
+width "100line%"
+special "none"
+height "1in"
+height_special "totalheight"
+status open
+
+\begin_layout Plain Layout
+
+\family typewriter
+\size footnotesize
+\color black
+download-mlst-data.pl
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+
+\family typewriter
+\size small
+\begin_inset Box Doublebox
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+use_makebox 0
+width "100col%"
+special "none"
+height "1in"
+height_special "totalheight"
+status open
+
+\begin_layout Plain Layout
+
+\family typewriter
+\size footnotesize
+\color black
+mlst-blast.pl -q query.fas -c mlst-data/BLASTDB/blastdb.fas -d blastdb -p mlst-data
+/PROFILES/PROFILES.txt
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+
+\family sans
+Approach taken
+\end_layout
+
+\begin_layout Standard
+
+\family sans
+ST-types are assigned based on the unique combination of allele types found
+ for a specific strain.
+ Here, we use 
+\begin_inset CommandInset href
+LatexCommand href
+name "blastn"
+target "https://en.wikipedia.org/wiki/BLAST"
+
+\end_inset
+
+ to compare query sequences against a curated database (
+\begin_inset CommandInset href
+LatexCommand href
+name "pubmlst.org"
+target "http://pubmlst.org"
+
+\end_inset
+
+) with known alleletypes, and then compare the result to a list of known
+ ST types.
+\end_layout
+
+\begin_layout Standard
+
+\family sans
+The first script provided, download-mlst-data.pl, will download subsets,
+ or the entire database from 
+\begin_inset CommandInset href
+LatexCommand href
+name "pubmlst.org"
+target "http://pubmlst.org"
+
+\end_inset
+
+, and save the data locally.
+ The script will also provide a fasta formatted file, blastdb.fas, to be
+ used as blast database, together with a profiles file, PROFILES.txt, to
+ be used as a lookup table when doing the ST-typing.
+\end_layout
+
+\begin_layout Standard
+
+\family sans
+Normally, a set of genes (around 6--7) are needed to assign a strain to
+ a unique ST-type.
+ Here we allow for 
+\begin_inset Quotes eld
+\end_inset
+
+missing genes
+\begin_inset Quotes erd
+\end_inset
+
+, and report the number of candidate ST-types a strain might belong to,
+ even though some gene might have failed in sequencing.
+\end_layout
+
+\begin_layout Section
+
+\family sans
+Requirements and installation
+\end_layout
+
+\begin_layout Subsection
+
+\family sans
+Perl
+\end_layout
+
+\begin_layout Standard
+
+\family sans
+For running the scripts, Perl needs to be installed, and preferrably with
+ the documentation system (perldoc).
+ Perl is preinstalled on Macintosh and Linux operating systems.
+ For MS Windows, this is a good start:
+\begin_inset Newline newline
+\end_inset
+
+ 
+\begin_inset CommandInset href
+LatexCommand href
+name "http://www.activestate.com/activeperl"
+target "http://www.activestate.com/activeperl"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Subsection
+
+\family sans
+Blast+
+\end_layout
+
+\begin_layout Standard
+
+\family sans
+For running the similarity searches, blastn and makeblastdb needs to be
+ installed in the PATH.
+ Both these programs can be downloaded at NCBI (
+\begin_inset CommandInset href
+LatexCommand href
+name "ftp://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/LATEST"
+target "ftp://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/LATEST"
+
+\end_inset
+
+).
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+
+\family sans
+Perl-scripts download-mlst-data.pl and mlst-blast.pl
+\end_layout
+
+\begin_layout Standard
+
+\family sans
+The Perl scripts download-mlst-data.pl and mlst-blast.pl are necessary.
+ They can be placed in the same folder as your input files, or installed
+ in the PATH.
+ Note that if the scripts are not in the PATH, they need to be started by
+ typing '
+\family typewriter
+perl scriptname
+\family sans
+' or '
+\family typewriter
+./scriptname
+\family sans
+'.
+ If the scripts lack execute permissions, change the mode by using the command
+ '
+\family typewriter
+chmod +x scriptname
+\family sans
+' (change 
+\family typewriter
+scriptname
+\family sans
+ to 
+\family typewriter
+download-mlst-data.pl
+\family sans
+ or 
+\family typewriter
+mlst-blast.pl
+\family sans
+).
+\end_layout
+
+\begin_layout Subsection
+
+\family sans
+Internet access to 
+\begin_inset CommandInset href
+LatexCommand href
+name "pubmlst.org"
+target "http://pubmlst.org"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\family sans
+The approach taken is highly dependent on the presence of a correctly formatted
+ data base located at 
+\begin_inset CommandInset href
+LatexCommand href
+name "pubmlst.org"
+target "http://pubmlst.org"
+
+\end_inset
+
+, and specifically specified in the file 
+\begin_inset CommandInset href
+LatexCommand href
+name "http://pubmlst.org/data/dbases.xml"
+target "http://pubmlst.org/data/dbases.xml"
+
+\end_inset
+
+.
+ No data can be downloaded unless this file is accessible through the internet.
+\end_layout
+
+\begin_layout Section
+
+\family sans
+Input
+\end_layout
+
+\begin_layout Standard
+
+\family sans
+Three files are needed as input for conducting the MLST search:
+\end_layout
+
+\begin_layout Enumerate
+
+\family sans
+A FASTA-formatted sequence file with DNA sequences.
+ The file should contain sequences from the loci to be used for strain typing.
+ The file can contain sequences from one or several strains.
+ In order to identify fasta entries as coming from the same strain, a strict
+ format for the fasta header needs to be used, for example: 
+\begin_inset Quotes eld
+\end_inset
+
+
+\family typewriter
+>Strain_xxx
+\family sans
+
+\begin_inset Quotes erd
+\end_inset
+
+.
+ Note that the strain name is followed by an underscore, and then som arbitrary
+ identifier.
+ No white spaces are allowed in the strain identifier.
+ See example below (p.
+ 
+\begin_inset CommandInset ref
+LatexCommand pageref
+reference "sub:Example-query-fasta"
+
+\end_inset
+
+).
+\end_layout
+
+\begin_layout Enumerate
+
+\family sans
+A sequence data base (blastdb), with fasta headers following this format:
+ Species acronym followed by double dash, followed by gene name, followed
+ by underscore and allele type number (e.g., 
+\begin_inset Quotes eld
+\end_inset
+
+
+\family typewriter
+>ecoli|adk_1
+\family sans
+
+\begin_inset Quotes erd
+\end_inset
+
+).
+ No white spaces are allowed in the fasta header.
+ See example below (p.
+ 
+\begin_inset CommandInset ref
+LatexCommand pageref
+reference "sub:Example-blast-database"
+
+\end_inset
+
+).
+\end_layout
+
+\begin_layout Enumerate
+
+\family sans
+A file containing ST-profiles (PROFILES.txt) according to a specific format.
+ See example below (p.
+ 
+\begin_inset CommandInset ref
+LatexCommand pageref
+reference "sub:Example-PROFILES.txt-file"
+
+\end_inset
+
+).
+\end_layout
+
+\begin_layout Standard
+
+\family sans
+The data-base file, and the ST-profile file can be downloaded and prepared
+ using the script download-mlst-data.pl.
+\end_layout
+
+\begin_layout Section
+
+\family sans
+Output
+\end_layout
+
+\begin_layout Subsubsection*
+
+\family sans
+From download-mlst-data.pl
+\end_layout
+
+\begin_layout Itemize
+
+\family sans
+mlst-data/ -- Folder with species data.
+ See more details in the file README.txt in the same folder.
+\end_layout
+
+\begin_layout Itemize
+
+\family sans
+mlst-data/BLASTDB/blastdb.fas -- File with concatenated and formatted fasta
+ sequences from all the species in the mlst-data folder.
+\end_layout
+
+\begin_layout Itemize
+
+\family sans
+mlst-data/PROFILES/PROFILES.txt -- File with ST-profile definitions for all
+ the species in the mlst-data folder.
+\end_layout
+
+\begin_layout Subsubsection*
+
+\family sans
+From mlst-blast.pl
+\end_layout
+
+\begin_layout Itemize
+
+\family sans
+<query file>.mlst-blast.out -- Main result from the ST-typing.
+ See example below (p.
+ 
+\begin_inset CommandInset ref
+LatexCommand pageref
+reference "sub:Example-<query-file>.mlst-blast."
+
+\end_inset
+
+).
+\end_layout
+
+\begin_layout Itemize
+
+\family sans
+<query file>.blast.out.tab -- Report from the blast search.
+\end_layout
+
+\begin_layout Itemize
+
+\family sans
+<query file>.blast.out.raw -- Details from the blast search.
+ Optional file.
+\end_layout
+
+\begin_layout Section
+
+\family sans
+Usage
+\end_layout
+
+\begin_layout Subsubsection*
+
+\family sans
+First time usage
+\end_layout
+
+\begin_layout Enumerate
+
+\family sans
+Prepare the query file with all fasta headers conforming to the strict input
+ format: strain name followed by underscore, then some identifier (e.g., 
+\begin_inset Quotes eld
+\end_inset
+
+>StrainA_nnn
+\begin_inset Quotes erd
+\end_inset
+
+).
+\end_layout
+
+\begin_layout Enumerate
+
+\family sans
+Download the whole, or parts of, the data base at 
+\begin_inset CommandInset href
+LatexCommand href
+name "pubmlst.org"
+target "http://pubmlst.org"
+
+\end_inset
+
+, using the script download-mlst-data.pl.
+ This will create a new folder in the current working directory named 
+\begin_inset Quotes eld
+\end_inset
+
+mlst-data
+\begin_inset Quotes erd
+\end_inset
+
+.
+ The folder will also contain a README.txt file with detailed information
+ of the folder content.
+ Importantly, the mlst-data folder also contains a fasta file (mlst-data/BLASTDB
+/blastdb.fas) ready formatted to be used as a blast data base, and a file
+ (mlst-data/PROFILES/PROFILES.txt) with ST-profile definitions.
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+
+\family typewriter
+
+\begin_inset Box Doublebox
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+use_makebox 0
+width "100col%"
+special "none"
+height "1in"
+height_special "totalheight"
+status open
+
+\begin_layout Plain Layout
+
+\family typewriter
+\size footnotesize
+\color black
+download-mlst-data.pl
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+Format the blast database.
+\family sans
+
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+
+\family typewriter
+\size small
+
+\begin_inset Box Doublebox
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+use_makebox 0
+width "100col%"
+special "none"
+height "1in"
+height_special "totalheight"
+status open
+
+\begin_layout Plain Layout
+
+\family typewriter
+\size footnotesize
+\color black
+mlst-blast.pl -c mlst-data/BLASTDB/blastdb.fas
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+
+\family sans
+Do a similarity search with blastn against the downloaded data base using
+ your query file, and assign strains to ST-types based on the definitions
+ you provide in a 
+\begin_inset Quotes eld
+\end_inset
+
+profiles
+\begin_inset Quotes erd
+\end_inset
+
+-file.
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+
+\family typewriter
+\size small
+
+\begin_inset Box Doublebox
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+use_makebox 0
+width "100col%"
+special "none"
+height "1in"
+height_special "totalheight"
+status open
+
+\begin_layout Plain Layout
+
+\family typewriter
+\size footnotesize
+\color black
+mlst-blast.pl -q query.fas
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+
+\family sans
+Done! Look in the current working directory for newly created text files.
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+Note that steps 3.
+ and 4.
+ above can be done in one step using the general set of arguments:
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+
+\family typewriter
+\size small
+
+\begin_inset Box Doublebox
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+use_makebox 0
+width "100col%"
+special "none"
+height "1in"
+height_special "totalheight"
+status open
+
+\begin_layout Plain Layout
+
+\family typewriter
+\size footnotesize
+\color black
+mlst-blast.pl -q query.fas -c mlst-data/BLASTDB/blastdb.fas -d blastdb -p mlst-data
+/PROFILES/PROFILES.txt
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection*
+
+\family sans
+Normal usage
+\end_layout
+
+\begin_layout Standard
+
+\family sans
+If the blast database is created (and named blastdb), and placed in the
+ working directory together with the query file and the PROFILES.txt, then
+ the usage simplifies to:
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+
+\family typewriter
+
+\begin_inset Box Doublebox
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+use_makebox 0
+width "100col%"
+special "none"
+height "1in"
+height_special "totalheight"
+status open
+
+\begin_layout Plain Layout
+
+\family typewriter
+\size footnotesize
+\color black
+mlst-blast.pl -q query.fas
+\end_layout
+
+\end_inset
+
+
+\family sans
+
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+The command above will also work if the blast database is called blastdb
+ and placed in mlst-data/BLASTDB/, and the PROFILES.txt is placed in mlst-data/PR
+OFILES/.
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+Another example, using query.fas on already created database mydb, and profiles
+ myprofiles.txt (both mydb and myprofiles.txt in folder myfolder):
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+
+\family typewriter
+
+\begin_inset Box Doublebox
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+use_makebox 0
+width "100col%"
+special "none"
+height "1in"
+height_special "totalheight"
+status open
+
+\begin_layout Plain Layout
+
+\family typewriter
+\size footnotesize
+\color black
+mlst-blast.pl -q query.fas -d myfolder/mydb -p myfolder/myprofiles.txt
+\end_layout
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+
+\family sans
+Note: In the example above, all the blast database files mydb.nhr, mydb.nin,
+ and mydb.nsq need to be in folder myfolder!
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+The script can also be used to create the blast database only (by calling
+ makeblastdb, which needs to be installed on the computer).
+ The following command will create the files that make up the blast database
+ (.nhr, .nin, .nsq).
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+
+\family typewriter
+
+\begin_inset Box Doublebox
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+use_makebox 0
+width "100col%"
+special "none"
+height "1in"
+height_special "totalheight"
+status open
+
+\begin_layout Plain Layout
+
+\family typewriter
+\size footnotesize
+\color black
+mlst-blast.pl -c mydb.fas
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+
+\family sans
+Downloading subsets of the database using download-mlst-data.pl
+\end_layout
+
+\begin_layout Standard
+
+\family sans
+If only a subset is needed from the pubmlst.org database, a restricted download
+ can be made by specifying the acronyms for the species wanted as an argument
+ to the download script.
+ In order to list all availiable data currently on 
+\begin_inset CommandInset href
+LatexCommand href
+name "pubmlst.org"
+target "http://pubmlst.org"
+
+\end_inset
+
+, one can invoke the script using the argument '-q'.
+ This will create a REPORT.txt with a list of species, acronyms, and genes
+ that are currently available for download.
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+
+\family typewriter
+
+\begin_inset Box Doublebox
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+use_makebox 0
+width "100col%"
+special "none"
+height "1in"
+height_special "totalheight"
+status open
+
+\begin_layout Plain Layout
+
+\family typewriter
+\size footnotesize
+\color black
+download-mlst-data.pl -q
+\end_layout
+
+\end_inset
+
+
+\family sans
+
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+Lets assume that we are interested in only one species, 
+\emph on
+Aspergillus fumigatus
+\emph default
+.
+ The command below will download all data for this species, and will store
+ the data in a folder A_fumigatus.
+ Note that the acronym used at 
+\begin_inset CommandInset href
+LatexCommand href
+name "pubmlst.org"
+target "http://pubmlst.org"
+
+\end_inset
+
+ for 
+\emph on
+A
+\emph default
+.
+ 
+\emph on
+fumigatus
+\emph default
+ is 
+\begin_inset Quotes eld
+\end_inset
+
+afumigatus
+\begin_inset Quotes erd
+\end_inset
+
+, which can be found in the file REPORT.txt generated by the command above.
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+
+\family typewriter
+
+\begin_inset Box Doublebox
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+use_makebox 0
+width "100col%"
+special "none"
+height "1in"
+height_special "totalheight"
+status open
+
+\begin_layout Plain Layout
+
+\family typewriter
+\size footnotesize
+\color black
+download-mlst-data.pl -s afumigatus -d A_fumigatus
+\end_layout
+
+\end_inset
+
+
+\family sans
+
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+The following command will download the data for the two species belonging
+ to the genus 
+\emph on
+Enterococcus
+\emph default
+:
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+
+\family typewriter
+
+\begin_inset Box Doublebox
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+use_makebox 0
+width "100col%"
+special "none"
+height "1in"
+height_special "totalheight"
+status open
+
+\begin_layout Plain Layout
+
+\family typewriter
+\size footnotesize
+\color black
+download-mlst-data.pl -s efaecalis,efaecium -d Enterococcus
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+
+\family sans
+Changing parameters for blastn using mlst-blast.pl
+\end_layout
+
+\begin_layout Standard
+
+\family sans
+See output from
+\begin_inset Newline newline
+\end_inset
+
+
+\family typewriter
+
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Box Doublebox
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+use_makebox 0
+width "100col%"
+special "none"
+height "1in"
+height_special "totalheight"
+status open
+
+\begin_layout Plain Layout
+
+\family typewriter
+\size footnotesize
+\color black
+mlst-blast.pl --help
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+
+\family sans
+Caveats
+\end_layout
+
+\begin_layout Standard
+
+\family sans
+The approach taken is highly dependent on the presence of a correctly formatted
+ data base located at 
+\begin_inset CommandInset href
+LatexCommand href
+name "pubmlst.org"
+target "http://pubmlst.org"
+
+\end_inset
+
+, and specifically specified in the file 
+\begin_inset CommandInset href
+LatexCommand href
+name "http://pubmlst.org/data/dbases.xml"
+target "http://pubmlst.org/data/dbases.xml"
+
+\end_inset
+
+.
+ No data can be downloaded unless this file is accessible.
+ Furthermore, the parsing of the blast results by the mlst-blast.pl script
+ is highly dependent on the formatting of both the blastdb.fas, and PROFILES.txt
+ files.
+\end_layout
+
+\begin_layout LyX-Code
+
+\end_layout
+
+\begin_layout Standard
+
+\family sans
+\begin_inset Newpage newpage
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection*
+
+\family sans
+\begin_inset CommandInset label
+LatexCommand label
+name "sub:Example-query-fasta"
+
+\end_inset
+
+Example query fasta file (input for the scripts)
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+>Apa_adk
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+GTAATTTGCTTGGCGCTCCGGGCGCGGGGAAAGGGACTCAGGCTCAGTTCATCATGGAGAAATATGGTATTCCGCAAATC
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+TCCACTGGCGATATGCTGCGTGCTGCGGTCAAATCTGGCTCCGAGCTGGGTAAACAAGCAAAAGACATTATGGATGCTGG
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+CAAACTGGTCACCGACGAACTGGTGATCGCGCTGGTTAAAGAGCGCATTGCTCAGGAAGACTGCCGCAACGGTTTCCTGT
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+TGGACGGCTTCCCGCGTACCATTCCGCAGGCAGACGCAATGAAAGAAGCGGGCATCAATGTTGATTACGTTCTGGAATTC
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+GACGTACCGGACGAACTGATTGTTGACCGTATCGTAGGCCGCCGCGTTCACGCGCCGTCTGGTCGTGTTTATCACGTTAA
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+ATTCAATCCGCCGAAAGTAGAAGGCAAAGACGACGTTACCGGTGAAGAGCTGACTACCCGTAAAGACGATCAGGAAGAGA
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+CCGTACGTAAACGTCTGGTTGAATACCATCAGATGACTGCACCGCTGATCGGCTACTACTCCAAAGAAGCGGAAGCGGGT
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+ACACC
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+>Apa_fumC
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+CGGCAGATAAGCTGTGGGGCGCACAAAACTCAGCGCTCGCTGGAGCATTTCCGCATTTCGACGGAGAAAATGCCCACCTC
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+ACTGATTCATGCGCTGGCGCTAACCAAGCGCGCAGCGGCAAAAGTTAATGAAGATTTAGGCTTGTTGTCTGAAGAGAAAG
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+CGAGCGCCATTCGGCAGGCGGCGGATGAAGTACTGGCAGGACAGCATGACGACGAATTCCCGCTGGCTATCTGGCAGACC
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+GGCTCCGGCACGCAAAGTAACATGAATATGAACGAAGTGCTGGCTAACCGGGCCAGTGAATTACTCGGTGGCGTGCGCGG
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+GATGGAACGTAAAGTTCACCCTAACGACGACGTGAACAAAAGCCAAAGTTCCAACGATGTCTTTCCGACGGCGATGCACG
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+TTGCGGCACTACTGGCGCTGCGCAAGCAACTCATTCCACAACTTAAAACCCTGACCCAGACGCTGAGTGAAAAATCCCGC
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+GCATTTGCTGATATCGTCAAAATCGGTCGTACCCACTTGCAGGACGCCACGCCGTTAACGCTGGGGCAGGAGATTTCCGG
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+CTGGGTAGCGATGCTGGAGCATAATCTCAAACATATCGAATACAGCCTGCCTCACGTAGCGGAACTGGCTCTGGGCGGTA
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+CAGCGGTGGGTACTGGACTAAATACCCATCCGGAATATGCGCGTCGCGTAGCAGATGAACTGGCAGTCATTACCTGTGCA
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+CCGTTTGTTACCGCACCGAACAAATTTGAAGCGCTGGCGACCTGTG
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+>Apa_gyrB
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+GACGGCCCGGTCTGCACCACATGGTATTCGAGGTGGTAGATAACGCTATCGACGAAGCGCTCGCGAGGTCACTGTAAAGA
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+AATTATCGTCACCATTCACGCCGATAACTCTGTCTCTGTACAGGATGACGGGCGCGGCATTCCGACCGGTATTCACCCGG
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+AAGAGGGCGTATCGGCGGCGGAAGTGATCATGACCGTTCTGCACGCAGGCGGTAAATTTGACGATAACTCCTATAAAGTG
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+TCCGGCGGTCTGCACGGCGTTGGTGTTTCGGTAGTAAACGCCCTGTCGCAAAAACTGGAGCTGGTTATCCAGCGCGAGGG
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+TAAAATTCACCGTCAGATCTACGAACACGGTGTACCGCAGGCCCCGCTGGCGGTTACCGGCGAGACTGAAAAAACCGGCA
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+CCATGGTGCGTTTCTGGCCAAGCCTTGAAACCTTCACCAATGTGACCGAGTTCGAATATGAAATTCTGGCGAAACGTCTG
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+CGTGAGTTGTCGTTCCTCAACTCCGGCGTTTCCATTCGTCTGCGCGATAAGCGCGACGGCAAAGAAGACCACTTCCACTA
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+TGAAGGCGGCATCAAGGCGTTCGTTGAATATCTGAACAAGAACAAAACGCCGATCCACCCGAATATCTTCTACTTTTCCA
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+CCGAAAAAGACGGTATTGGCGTCGAAGTGGCGTTGCAGTGGAACGATGGCTTCCAGGAAAACATCTACTGCTTTACCAAC
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+AACATTCCGCAGCGTGACGGCGGTACTCACCTGGCAGGTTTCCG
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+>Apa_icd
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+GTGTAATGAAAGTAAAGTAGTTGTTCCGGCACAAGGCAAGAAGATCACCCTGCAAAACGGCAAACTCAACGTTCCTGAAA
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+ATCCGATTATCCCTTACATTGAAGGTGATGGAATCGGTGTAGATGTAACCCCAGCCATGCTGAAAGTGGTCGACGCTGCA
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+GTCGAGAAAGCCTATAAAGGCGAGCGTAAAATCTCCTGGATGGAAATTTACACCGGTGAAAAATCCACACAGGTTTATGG
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+TCAGGACGTCTGGTTGCCTGCTGAAACCCTTGATCTGATTCGTGAATATCGCGTTGCCATTAAAGGCCCGCTGACCACTC
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+CGGTTGGTGGCGGTATTCGCTCTCTGAACGTTGCCCTGCGCCAGGAACTGGATCTCTACATCTGCCTGCGTCCGGTACGT
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+TACTATCAGGGCACTCCAAGCCCGGTTAAACACCCTGAACTGACCGATATGGTTATCTTCCGTGAAAACTCGGAAGACAT
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+TTATGCGGGTATCGAATGGAAAGCAGACTCTGCCGACGCTGAGAAAGTGATTAAATTCCTGCGTGAAGAGATGGGCGTGA
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+AGAAAATTCGCTTCCCGGAACATTGCGGTATCGGTATTAAGCCGTGTTCGGAAGAAGGCACCAAACGTCTGGTTCGTGCA
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+GCGATCGAATACGCAATTGCTAACGATCGTGACTCTGTGACCCTGGTGCACAAAGGCAACATCATGAAGTTCACCGAAGG
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+CGCGTTTAAAGACTGGGGCTACCAACTGGCGCGTGAAGAATTTGGCGGTGAACTGATCGACGGCGGCCCGTGGCTGAAAG
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+TTAAAAACCCGAATACCGGCAAAGAGATCGTCATTAAAGACGTGATTGCTGATGCATTCCTGCAACAGATCCTT
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+>Apa_mdh
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+CTGCTGGCGGTATTGGCCAGGCGCTTGCACTACTGTTAAAAACCCAACTGCCTTCAGGTTCAGAACTCTCTCTGTATGAT
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+ATCGCTCCAGTGACTCCCGGTGTGGCTGTCGATCTGAGCCATATCCCTACTGCTGTGAAAATCAAAGGTTTTTCAGGTGA
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+AGATGCGACTCCGGCGCTGGAAGGTGCAGATGTCGTTCTTATCTCTGCAGGCGTAGCGCGTAAACCGGGTATGGATCGTT
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+CCGACCTGTTTAACGTTAACGCCGGTATCGTGAAAAACCTGGTACAGCAAGTTGCGAAAACCTGCCCGAAAGCGTGCATT
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+GGTATTATCACTAACCCGGTTAACACTACAGTTGCGATTGCTGCTGAAGTGCTGAAAAAAGCCGGTGTTTATGACAAAAA
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+CAAACTGTTCGGCGTTACCACGCTGGATATCATTCGTTCCAACACCTTTGTTGCGGAACTGAAAGGCAAACAGCCAGGCG
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+AAGTTGAAGTGCCGGTTATTGGTGGTCACTCTGGTGTTACCATTCTGCCGCTGCTGTCACAGGTTCCTGGCGTTAGTTTT
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+ACCGAGCAGGAAGTGGCTGATCTGACCAAACGTATCCAGAACGCGGGTACTGAGGTGGTTGAAGCGAAAGCCGGTGGCGG
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+GTCTGCAACCCTGTCTATGGGCCAGGCAGCTGCACGTTTTGGTCTGTCTCTGGTTCGCGCACTGCAGGGCGAACAAGGCG
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+TTGTCGAATGTGCCTACGTTGAAGGCGACGGTCAGTACGCTCGTTTCTTCTCTCAACCGCTGCTGCTGGGTAAAAACGGC
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+GTGGAAGAGCGTAAATCTATCGGTACTCTGAGCGCATTTGAACAGAACGCGCTGGAAGGTATGCTGGATACGCT
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+>Apa_purA
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+ACGGTGTTGTGCTGTCTCCGGCTGCGCTGATGAAAGAGATGAAAGAACTGGAAGACCGTGGCATCCCCGTTCGTGAGCGT
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+CTGCTGCTGTCCGAAGCATGTCCGCTGATCCTTGATTATCACGTTGCGCTGGATAACGCGCGTGAGAAAGCGCGTGGCGC
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+GAAAGCGATCGGCACCACCGGTCGTGGTATCGGGCCTGCTTATGAAGATAAAGTAGCACGTCGCGGTCTGCGTGTTGGCG
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+ACCTTTTCGACAAAGAAACCTTCGCTGAAAAACTGAAAGAAGTGATGGAATATCACAACTTCCAGTTGGTTAACTACTAC
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+AAAGCTGAAGCGGTTGATTACCAGAAAGTTCTGGATGATACGATGGCTGTTGCCGACATCCTGACTTCTATGGTTGTTGA
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+CGTTTCTGACCTGCTCGACCAGGCGCGTCAGCGTGGCGATTTCGTCATGTTTGAAGGTGCGCAGGGTACGCTGCTGGATA
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+TCGACCACGGTACATATCCGTACGTAACTTCTTCCAACACCACTGCTGGTGGCGTGGCGACCGGTTCCGGCCTGGGCCCG
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+CGTTATGTTGATTACGTTCTGGGTATCCTCAAAGCTTACTCCACTCGTGTGGGGGCAGGTCCGTTCCCGACCGAACTGTT
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+TGATGAAACTGGCGAGTTCCTCTGCAAGCAGGGTAACGAATTCGGCGCAACTACGGGTCGTCGTCGTCGTACCGGCTGGC
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+TGGACACCGTTGCCGTTCGTCGTGCGGTACAGTTGAACTCCCTGTCTGGCTTCTGCCTGACTAAACTGGACGTTCTGGAT
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+GGCCTGAAAGAGGTTAAACTCTGCGTGGCTTA
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+>Apa_recA
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+CAGCGTGAAGGTAAAACCTGTGCGTTTATCGATGCTGAACACGCGCTGGACCCAATCTACGCACGTAAACTGGGCGTCGA
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+TATCGACAACCTGCTGTGCTCCCAGCCGGACACTGGCGAGCAGGCACTGGAAATCTGTGACGCCCTGGCACGTTCTGGTG
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+CAGTAGACGTTATCGTCGTTGACTCCGTGGCGGCACTGACGCCGAAAGCGGAAATCGAAGGTGAAATCGGCGACTCTCAC
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+ATGGGCCTTGCGGCACGTATGATGAGCCAGGCGATGCGTAAGCTGGCGGGTAACCTGAAGCAGTCCAACACGCTGCTGAT
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+CTTCATCAACCAGATCCGTATGAAAATTGGTGTGATGTTCGGTAACCCGGAAACCACTACCGGTGGTAACGCGCTGAAAT
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+TCTACGCCTCTGTTCGTCTCGACATCCGTCGTATCGGCGCGGTGAAAGAGGGCGAAAACGTGGTGGGTAGCGAAACCCGC
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+GTGAAAGTGGTGAAGAACAAAATCGCTGCGCCGTTTAAACAGGCTGAATTCCAGATCCTCTACGGCGAAGGTATCAACTT
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+CTACGGCGAGCTGGTTGACCTGGGCGTGAAAGAGAAGCTTATCGAGAAAGCAGGCGCGTGGTACAG
+\end_layout
+
+\begin_layout LyX-Code
+
+\end_layout
+
+\begin_layout Standard
+
+\family sans
+\begin_inset Newpage newpage
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection*
+
+\family sans
+\begin_inset CommandInset label
+LatexCommand label
+name "sub:Example-blast-database"
+
+\end_inset
+
+Example blast database file (part.) (input for the scripts)
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+>ecoli|adk_1
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+GGGGAAAGGGACTCAGGCTCAGTTCATCATGGAGAAATATGGTATTCCGCAAATCTCCACTGGCGATATG
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+CTGCGTGCTGCGGTCAAATCTGGCTCCGAGCTGGGTAAACAAGCAAAAGACATTATGGATGCTGGCAAAC
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+TGGTCACCGACGAACTGGTGATCGCGCTGGTTAAAGAGCGCATTGCTCAGGAAGACTGCCGTAATGGTTT
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+CCTGTTGGACGGCTTCCCGCGTACCATTCCGCAGGCAGACGCGATGAAAGAAGCGGGCATCAATGTTGAT
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+TACGTTCTGGAATTCGACGTACCGGACGAACTGATTGTTGATCGTATCGTAGGCCGCCGCGTTCATGCGC
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+CGTCTGGTCGTGTTTATCACGTTAAATTCAATCCGCCGAAAGTAGAAGGCAAAGACGACGTTACCGGTGA
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+AGAACTGACTACCCGTAAAGACGATCAGGAAGAAACCGTACGTAAACGTCTGGTTGAATACCATCAGATG
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+ACTGCACCGCTGATCGGCTACTACTCCAAAGAAGCGGAAGCGGGTA
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+>ecoli|adk_2
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+GGGGAAAGGGACTCAGGCTCAGTTCATCATGGAGAAATATGGTATTCCGCAAATCTCCACTGGCGATATG
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+CTGCGTGCTGCGGTCAAATCTGGCTCCGAGCTGGGTAAACAAGCAAAAGACATTATGGATGCTGGCAAAC
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+TGGTTACCGACGAACTGGTGATCGCGCTGGTTAAAGGGCGCATTGCTCAGGAAGACTGCCGTAATGGTTT
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+CCTGTTGGACGGCTTCCCGCGTACCATTCCGCAGGCAGACGCGATGAAAGAAGCGGGCATCAATGTTGAT
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+TACGTTCTGGAATTCGACGTACCGGACGAACTGATCGTTGACCGTATCGTCGGTCGCCGCGTTCACGCGC
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+CGTCTGGTCGTGTTTATCACGTTAAATTCAATCCGCCGAAAGTAGAAGGTAAAGACGACGTTACCGGTGA
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+AGAACTGACTACCCGTAAAGACGATCAGGAAGAAACCGTACGTAAACGTCTGGTTGAATACCATCAGATG
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+ACAGCACCGCTGATCGGCTACTACTCCAAAGAAGCTGAAGCGGGTA
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+>ecoli|fumC_1
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+CGAGCGCCATTCGTCAGGCTGCGGATGAAGTGCTGGCGGGGCAGCATGATGATGAATTCCCGCTGGCAAT
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+CTGGCAGACCGGTTCTGGCACACAAAGTAACATGAACATGAACGAAGTGCTGGCCAATCGGGCGAGTGAA
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+CTGCTCGGCGGCGTGCGCGGGATGGAACGTAAAGTTCACCCTAACGATGACGTGAACAAAAGCCAAAGTT
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+CCAACGATGTCTTTCCGACGGCGATGCACGTTGCGGCGCTGCTGGCGCTGCGCAAGCAACTCATTCCGCA
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+GCTTAAAACCCTGACACAGACGCTGAGTGAAAAATCGCGTGCATTTGCCGATATCGTAAAAATCGGTCGA
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+ACCCACTTGCAGGACGCCACGCCGCTAACACTGGGGCAGGAGATTTCCGGCTGGGTAGCGATGCTCGAGC
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+ATAATCTCAAACATATCGAATACAGCCTGCCTCACGTAGCGGAACTGGC
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+>ecoli|fumC_2
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+CGAGCGCCATTCGTCAGGCGGCGGATGAAGTACTGGCAGGACAGCATAACGATGAATTCCCGCTGGCTAT
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+CTGGCAGACCGGCTCCGGCACGCAAAGTAATATGAACATGAACGAAGTGCTGGCTAACCGGGCCAGTGAA
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+TTACTTGGCGGCGTGCGCGGGATGGAGCGTAAAGTTCATCCTAACGACGACGTGAACAAAAGCCAAAGTT
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+CCAATGATGTCTTTCCGACGGCGATGCACGTTGCGGCGCTGCTGGCGCTGCGCAAGCAACTCATTCCGCA
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+GCTTAAATCCCTGACACAGACGCTGAGTGAAAAATCGCGCGCATTTGCCGATATCGTCAAAATCGGTCGA
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+ACCCACTTGCAGGATGCCACGCCGCTAACACTAGGGCAGGAGATTTCCGGCTGGGTAGCGATGCTGGAGC
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+ATAATCTCAAACATATCGAATACAGCCTGCCGCATGTAGCGGAACTGGC
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+>ecoli|gyrB_1
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+GGTCTGCACGGCGTTGGTGTTTCGGTAGTAAACGCCCTGTCGCAAAAACTGGAGCTGGTTATCCAGCGCG
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+AGGGTAAAATTCACCGTCAGATCTACGAACACGGTGTACCGCAGGCTCCGCTGGCGGTTACCGGCGAGAC
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+TGAAAAAACCGGCACCATGGTGCGTTTCTGGCCCAGCCTCGAAACCTTCACCAATGTGACCGAGTTCGAA
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+TATGAAATTCTGGCGAAACGTCTGCGTGAGTTGTCGTTCCTCAACTCCGGCGTTTCCATTCGTCTGCGCG
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+ACAAGCGTGACGGCAAAGAAGACCACTTCCACTATGAAGGCGGCATCAAGGCGTTCGTTGAATATCTGAA
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+CAAGAACAAAACGCCGATCCATCCGAATATCTTCTACTTCTCCACCGAAAAAGACGGTATTGGCGTCGAA
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+GTGGCGTTGCAGTGGAACGATGGCTTCCAGGAAAACATCT
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+>ecoli|gyrB_2
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+GGTCTGCACGGCGTTGGTGTTTCGGTAGTAAACGCCCTGTCGCAAAAACTGGAGCTGGTTATCCAGCGCG
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+AGGGTAAAATTCACCGTCAGATCTACGAACACGGTGTACCGCAGGCCCCGCTGGCGGTTACCGGCGAGAC
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+TGAAAAAACCGGCACCATGGTGCGTTTCTGGCCTAGCCTCGAAACCTTCACCAATGTGACCGAGTTCGAA
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+TATGAAATTCTGGCGAAACGTCTGCGTGAGTTGTCGTTCCTCAACTCCGGCGTTTCCATTCGTCTGCGCG
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+ACAAGCGTGACGGCAAAGAAGACCACTTCCACTATGAAGGCGGCATCAAAGCGTTCGTTGAATATCTGAA
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+CAAGAACAAAACGCCGATCCACCCGAATATCTTCTACTTCTCCACCGAAAAAGATGGTATCGGCGTTGAA
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+GTGGCGTTGCAGTGGAACGATGGCTTCCAGGAAAACATCT
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+>ecoli|icd_1
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+CGACGCTGCAGTCGAGAAAGCCTATAAAGGCGAGCGTAAAATCTCCTGGATGGAAATTTACACCGGTGAA
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+AAATCCACACAGGTTTATGGTCAGGATGTCTGGCTGCCTGCTGAAACCCTTGATCTGATTCGTGAATATC
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+GCGTTGCCATTAAAGGTCCGCTGACCACTCCTGTTGGTGGCGGTATTCGCTCTCTGAACGTTGCCCTGCG
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+CCAGGAACTGGATCTCTACATCTGCCTGCGTCCGGTACGTTACTATCAGGGCACTCCAAGCCCGGTTAAA
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+CACCCTGAACTGACCGATATGGTTATCTTCCGTGAAAACTCGGAAGACATTTATGCGGGTATCGAATGGA
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+AAGCAGACTCTGCCGACGCCGAGAAAGTGATTAAATTCCTGCGTGAAGAGATGGGGGTGAAGAAAATTCG
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+CTTCCCGGAACATTGTGGTATCGGTATTAAGCCGTGTTCGGAAGAAGGCACCAAACGTCTGGTTCGTGCA
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+GCGATCGAATACGCAATTGCTAACGATC
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+>ecoli|icd_2
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+CGACGCTGCAGTCGAGAAAGCCTATAAAGGCGAGCGTAAAATCTCCTGGATGGAAATTTACACCGGTGAA
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+AAATCCACACAGGTTTATGGTCAGGATGTCTGGCTGCCTGCTGAAACCCTTGATCTGATTCGTGAATATC
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+GCGTTGCCATTAAAGGTCCGCTGACCACTCCTGTTGGTGGCGGTATTCGTTCTCTGAACGTTGCCCTGCG
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+CCAGGAACTGGATCTCTACATCTGCCTGCGTCCGGTACGTTACTATCAGGGCGCCCCAAGCCCGGTTAAA
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+CACCCTGAACTGACCGATATGGTTATCTTCCGTGAAAACTCGGAAGACATTTATGCAGGTATCGAATGGA
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+AAGCTGATTCTGCCGACGCTGAGAAAGTGATTAAATTCCTGCGTGAAGAGATGGGGGTGAAGAAAATTCG
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+CTTCCCAGAACATTGTGGTATCGGTATTAAGCCGTGTTCGGAAGAAGGCACCAAACGTCTGGTTCGTGCA
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+GCGATCGAATACGCAATTGCTAACGATC
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+>ecoli|mdh_1
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+GGTGTAGCGCGTAAACCGGGTATGGATCGTTCCGACCTGTTTAACGTTAACGCCGGCATCGTGAAAAACC
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+TGGTACAGCAAGTTGCGAAAACCTGCCCGAAAGCGTGCATTGGTATTATCACTAACCCGGTTAACACCAC
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+AGTTGCAATTGCTGCTGAAGTGCTGAAAAAAGCCGGTGTTTATGACAAAAACAAACTGTTCGGCGTTACC
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+ACGCTGGATATCATTCGTTCCAACACCTTTGTTGCGGAACTGAAAGGCAAACAGCCAGGCGAAGTTGAAG
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+TGCCGGTTATTGGCGGTCACTCTGGTGTTACCATTCTGCCGCTGCTGTCACAGGTTCCTGGCGTTAGTTT
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+TACCGAGCAGGAAGTGGCTGATCTGACCAAACGTATCCAGAACGCGGGTACTGAGGTGGTTGAAGCGAAA
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+GCCGGTGGCGGGTCTGCAACCCTGTCTATGGG
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+>ecoli|mdh_2
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+GGTGTAGCGCGTAAACCGGGTATGGATCGTTCCGACCTGTTTAACGTTAACGCCGGCATCGTGAAAAACC
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+TGGTACAGCAAGTTGCGAAAACCTGCCCGAAAGCGTGCATTGGTATTATTACTAACCCGGTTAACACCAC
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+AGTTGCGATTGCTGCTGAAGTGCTGAAAAAAGCCGGTGTTTATGACAAAAACAAACTGTTCGGCGTTACC
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+ACGCTGGATATCATTCGTTCCAACACCTTTGTTGCGGAACTGAAAGGCAAACAGCCTGGCGAAGTTGAAG
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+TGCCGGTTATTGGCGGTCACTCTGGTGTTACCATTCTGCCGCTGCTGTCACAGGTTCTTGGCGTTAGTTT
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+TACCGAGCAGGAAGTGGCTGATCTGACCAAACGCATCCAGAACGCGGGTACTGAAGTGGTTGAAGCGAAA
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+GCCGGTGGCGGGTCTGCAACCCTGTCTATGGG
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+>ecoli|purA_1
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+ATAACGCGCGTGAGAAAGCGCGTGGCGCGAAAGCGATCGGCACCACCGGTCGTGGTATCGGGCCTGCTTA
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+TGAAGATAAAGTGGCACGTCGCGGTCTGCGTGTTGGCGACCTTTTCGACAAAGAAACCTTCGCTGAAAAA
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+CTGAAAGAAGTGATGGAATATCACAACTTCCAGTTGGTTAACTACTACAAAGCTGAAGCGGTTGATTACC
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+AGAAAGTTCTGGATGATACGATGGCTGTTGCCGACATCCTGACTTCTATGGTGGTTGACGTTTCTGACCT
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+GCTCGACCAGGCGCGTCAGCGTGGCGATTTCGTCATGTTTGAAGGTGCGCAGGGTACGCTGCTGGATATC
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+GACCACGGTACTTATCCGTACGTAACTTCTTCCAACACCACTGCTGGTGGCGTGGCGACCGGTTCCGGCC
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+TGGGCCCGCGTTATGTTGATTACGTTCTGGGTATCCTCAAAGCTTACTCCACTCGTGT
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+>ecoli|purA_2
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+ATAACGCGCGTGAGAAAGCGCGTGGCGCGAAAGCGATCGGCACCACCGGTCGTGGTATCGGGCCTGCTTA
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+TGAAGATAAAGTGGCACGTCGCGGTCTGCGTGTTGGCGACCTTTTCGACAAAGAAACCTTCGCTGAAAAA
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+CTGAAAGAAGTGATGGAATATCACAACTTCCAGTTGGTTAACTACTACAAAGCTGAAGCGGTTGATTACC
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+AGAAAGTTCTGGATGATACGATGGCTGTTGCCGACATCCTGACTTCTATGGTGGTTGACGTTTCTGACCT
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+GCTCGACCAGGCGCGTCAGCGTGGCGATTTCGTCATGTTCGAAGGTGCGCAGGGTACGCTGCTGGATATC
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+GACCACGGTACTTATCCGTACGTAACTTCTTCCAACACCACTGCTGGTGGCGTGGCGACCGGTTCCGGCC
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+TGGGCCCGCGTTATGTTGATTACGTTCTGGGTATCCTCAAAGCTTACTCCACTCGTGT
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+>ecoli|recA_1
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+CGCACGTAAACTGGGCGTCGATATCGACAACCTGCTGTGCTCCCAGCCGGACACCGGCGAGCAGGCACTG
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+GAAATCTGTGACGCCCTGGCGCGTTCTGGTGCAGTAGACGTTATCGTCGTTGACTCCGTGGCGGCACTGA
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+CGCCGAAAGCGGAAATCGAAGGCGAAATCGGCGACTCTCACATGGGCCTTGCGGCACGTATGATGAGCCA
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+GGCGATGCGTAAGCTGGCGGGTAACCTGAAGCAGTCCAACACGCTGCTGATCTTCATCAACCAGATCCGT
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+ATGAAAATTGGTGTGATGTTCGGTAACCCGGAAACCACTACCGGTGGTAACGCGCTGAAATTCTACGCCT
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+CTGTTCGTCTCGACATCCGTCGTATCGGCGCGGTGAAAGAGGGCGAAAACGTGGTGGGTAGCGAAACCCG
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+CGTGAAAGTGGTGAAGAACAAAATCGCTGCACCGTTTAAACAGGCTGAATTTCAGATCCTCTACGGCGAA
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+GGTATCAACTTCTACGGCGA
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+>ecoli|recA_2
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+CGCACGTAAACTGGGCGTCGATATCGACAACCTGCTGTGCTCCCAGCCGGACACCGGCGAGCAGGCACTG
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+GAAATCTGTGACGCCCTGGCGCGTTCTGGCGCAGTAGACGTTATCGTCGTTGACTCCGTGGCGGCACTGA
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+CGCCGAAAGCGGAAATCGAAGGCGAAATCGGCGACTCTCACATGGGCCTTGCGGCACGTATGATGAGCCA
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+GGCGATGCGTAAGCTGGCGGGTAACCTGAAGCAGTCCAACACGCTGCTGATCTTCATCAACCAGATCCGT
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+ATGAAAATTGGTGTGATGTTCGGTAACCCGGAAACCACTACCGGTGGTAACGCGCTGAAATTCTACGCCT
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+CTGTTCGTCTCGACATCCGTCGTATCGGCGCGGTGAAAGAGGGCGAAAACGTGGTGGGTAGCGAAACCCG
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+CGTGAAAGTGGTGAAGAACAAAATCGCTGCGCCGTTTAAACAGGCTGAATTCCAGATCCTCTACGGCGAA
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+GGTATCAACTTCTACGGCGA
+\end_layout
+
+\begin_layout LyX-Code
+...
+\end_layout
+
+\begin_layout Standard
+
+\family sans
+\begin_inset Newpage newpage
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection*
+
+\family sans
+\begin_inset CommandInset label
+LatexCommand label
+name "sub:Example-PROFILES.txt-file"
+
+\end_inset
+
+Example PROFILES.txt file (part.) (input for the scripts)
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+ecoli|ST_1 ecoli|adk_4 ecoli|fumC_2 ecoli|gyrB_2 ecoli|icd_4 ecoli|mdh_4
+ ecoli|purA_4 ecoli|recA_4
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+ecoli|ST_2 ecoli|adk_5 ecoli|fumC_3 ecoli|gyrB_2 ecoli|icd_6 ecoli|mdh_5
+ ecoli|purA_5 ecoli|recA_4
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+ecoli|ST_3 ecoli|adk_6 ecoli|fumC_4 ecoli|gyrB_3 ecoli|icd_7 ecoli|mdh_7
+ ecoli|purA_7 ecoli|recA_6
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+ecoli|ST_4 ecoli|adk_6 ecoli|fumC_5 ecoli|gyrB_4 ecoli|icd_8 ecoli|mdh_8
+ ecoli|purA_8 ecoli|recA_2
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+ecoli|ST_5 ecoli|adk_7 ecoli|fumC_6 ecoli|gyrB_5 ecoli|icd_9 ecoli|mdh_9
+ ecoli|purA_8 ecoli|recA_2
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+ecoli|ST_6 ecoli|adk_8 ecoli|fumC_7 ecoli|gyrB_1 ecoli|icd_1 ecoli|mdh_10
+ ecoli|purA_8 ecoli|recA_6
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+ecoli|ST_7 ecoli|adk_9 ecoli|fumC_8 ecoli|gyrB_5 ecoli|icd_1 ecoli|mdh_11
+ ecoli|purA_8 ecoli|recA_7
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+ecoli|ST_8 ecoli|adk_10 ecoli|fumC_9 ecoli|gyrB_5 ecoli|icd_10 ecoli|mdh_12
+ ecoli|purA_9 ecoli|recA_2
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+ecoli|ST_9 ecoli|adk_6 ecoli|fumC_4 ecoli|gyrB_3 ecoli|icd_7 ecoli|mdh_7
+ ecoli|purA_7 ecoli|recA_8
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+ecoli|ST_10 ecoli|adk_10 ecoli|fumC_11 ecoli|gyrB_4 ecoli|icd_8 ecoli|mdh_8
+ ecoli|purA_8 ecoli|recA_2
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+ecoli|ST_11 ecoli|adk_12 ecoli|fumC_12 ecoli|gyrB_8 ecoli|icd_12 ecoli|mdh_15
+ ecoli|purA_2 ecoli|recA_2
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+ecoli|ST_12 ecoli|adk_13 ecoli|fumC_13 ecoli|gyrB_9 ecoli|icd_13 ecoli|mdh_16
+ ecoli|purA_10 ecoli|recA_9
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+ecoli|ST_13 ecoli|adk_6 ecoli|fumC_6 ecoli|gyrB_5 ecoli|icd_9 ecoli|mdh_9
+ ecoli|purA_8 ecoli|recA_2
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+ecoli|ST_14 ecoli|adk_14 ecoli|fumC_14 ecoli|gyrB_10 ecoli|icd_14 ecoli|mdh_17
+ ecoli|purA_7 ecoli|recA_10
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+ecoli|ST_15 ecoli|adk_15 ecoli|fumC_15 ecoli|gyrB_11 ecoli|icd_15 ecoli|mdh_18
+ ecoli|purA_11 ecoli|recA_11
+\end_layout
+
+\begin_layout LyX-Code
+...
+\end_layout
+
+\begin_layout Standard
+
+\family sans
+\begin_inset Newpage newpage
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection*
+
+\family sans
+\begin_inset CommandInset label
+LatexCommand label
+name "sub:Example-<query-file>.mlst-blast."
+
+\end_inset
+
+Example <query file>.mlst-blast.out file (output from the mlst-blast.pl script)
+\end_layout
+
+\begin_layout LyX-Code
+# Query,Species,ST-type,adk,fumC,gyrB,icd,mdh,purA,recA,
+\end_layout
+
+\begin_layout LyX-Code
+Apa,ecoli,131,53,40,47,13,36,28,29,
+\end_layout
+
+\end_body
+\end_document
