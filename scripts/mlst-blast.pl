@@ -246,7 +246,6 @@ if ($similarity) {
 ## Set up BLAST db
 if ($createdb) { # create data base with fasta file as argument
     my $file = $createdb;
-     print Dumper($file);warn "\nfile (hit return to continue)\n" and getc(); 
     if (-e $file) {
         my $name = fileparse($file, qr/\.[^.]*$/);
         my $dir = dirname($file);
