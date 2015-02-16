@@ -380,8 +380,9 @@ foreach my $sp (@{$data->{'species'}}) {
                 $dashes = 1;
             }
             if ($fixfasta) {
-                $file_content =~ s/(\S+)-(\d+)$/$1_$2/mg;  # Replace all '-' with '_'
-                $file_content =~ s/>[\w|\|]+\n\s*\n*>/>/g; # Remove empty sequences
+                $file_content =~ s/(\S+)-(\d+)$/$1_$2/mg; # Replace all '-' with '_'
+                $file_content =~ s/>[\w|\|]+\n\s*\n//g;   # Remove empty sequences
+                $file_content =~ s/>[\w|\|]+\n>/>/g;      # Remove empty sequences
             }
             if ($createblast) {
                 $file_content =~ s/>(\S+)/>$acronym\|$1/mg;
