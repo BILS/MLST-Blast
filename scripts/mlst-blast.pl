@@ -165,6 +165,9 @@ BILS/NRM
 
 Handle when No hits: report ST type for the loci that have hits, but give a warning about No hits for certain seqs? Adjust min_percent. How stringent? Perhaps use info from all-against-all on db. Adjust min_length. Set to length of query seq?
 
+=head1 DOWNLOAD
+
+https://github.com/nylander/MLST-Blast
 
 =cut
 
